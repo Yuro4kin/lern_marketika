@@ -1,0 +1,544 @@
+                                                                ///*Импорт в основной фаил*/
+    @import 'normalize.scss';
+                                                              ///*Шрифты будут в разных местах, сохраним в миксин*/
+    // === Mixins ===
+    @mixin font-lato {
+      font-family: 'Lato', sans-serif;
+    }
+    @mixin  font-montserrat {
+      font-family: 'Montserrat', sans-serif;
+    }
+    // === / Mixins === //
+
+    //=== Variables==//
+    $color-white:#ffffff;
+    //=== Variables==//
+
+    $color-main: pink;
+    $color-secondary: none;
+    h1 {
+      color: $color-secondary;
+    }
+
+
+    //=== Common ===//
+    * {
+      box-sizing: border-box;                                   /*box-sizing, вычисление размеров ширины изначально по дефолту своеобразно*/
+                                                                /*100% ширины и плюсуются margin и padding, для того, чтоб этого избежать, браузер считае ширину включая padding input */
+    }
+
+   body  {
+     @include font-lato;
+     background-color: $color-main;
+     color: #414141;                                             /*задаем общий цвет, чтоб везде не писать его */
+   }
+
+   .section-outer {}
+   .section-inner {
+      width: 1180px;
+      margin: 0 auto;
+   }
+
+                                                                  /*переиспользуем, оптимизация текста, шрифты похожие в блоках*/
+   .description-item {
+        &__icon {                                                 /*Стили меняем на &__icon*/
+          margin-bottom: 20px;                                    /*от иконки отступ вниз 20px*/
+        }
+        &__title {                                                /*Стили меняем на &__title*/
+          margin-bottom: 14px;                                    /*от названия до содержания отступ 14px*/
+          font-size: 18px;
+          line-height: 22px;
+          font-weight: bold;
+        }
+        &__text {                                                  /*Стили меняем на &__text*/
+          font-size: 16px;
+          line-height: 28px;
+          font-weight: 300;
+          color: #6C6C6C;                                          /*пока напишем цвет сдесь, затем вынесем в переменную*/
+                                                                   /*margin-top: 14px; отступ от нижнего текста */
+        }
+
+
+     /*.subtitle{
+       font-size: 18px;
+       line-height: 22px;
+       font-weight: bold;
+       margin-top: 30px;                                            //отступ от подзаголовка до содержания
+        }*/
+    }
+   //=== Common ===//
+
+
+
+    //=== Header ===//
+
+                                                                    /*не нужно чтобы фон повторялся, нужно, чтоб он распологался по центру*/
+
+                                                                    /*располагается абсолютно правильно_1*/
+                                                                    /*т.к. располпгаются еще элементы, так мы вытягиваем это по высоте окна браузера*/
+
+   .section-header  {
+     color: #ffffff;
+     background-image: url("../images/marketika.png");
+     background-position: center;
+     background-repeat: no-repeat;
+     background-size: cover;                                       /*фоновая картинка растянулась*/
+     position: relative;
+
+                                                                   /*вытягиваем по высоте окна браузера*/
+     .section-inner {
+       height: 100vh;
+       position: relative;
+       z-index: 10;                                                 /*так как находится внтури него overlay поднимаем его выше*/
+       display: flex;                                               /*логотип и контент по флексу должны быть вертикальными*/
+       flex-direction: column;                                      /*чтобы логотип и элементы шли вертикально по flex*/
+     }
+
+                                                                   /*маска, черная на картинке, отдельным стилем поверх*/
+                                                                   /*в псевдоэлементе не будет контента*/
+                                                                   /*располагается абсолютно правильно_1*/
+                                                                   /*sass - $ амперсанд говорит о том, что вместо него подставится .section-header */
+     &::before {
+       content: '';
+       position: absolute;
+       z-index: 5;                                                 /*чтоб overlay не перекрывал контент*/
+                                                                   /*растянем его по периметру*/
+       top: 0;
+       right: 0;
+       bottom: 0;
+       left: 0;
+       background-color: rgba(20, 39, 41, .6);
+     }
+
+
+                                                                   /*sass - $$ амперсанд говорит о том, что вместо него подставится .section-header */
+      &-logo {
+        font-weight: bold;
+        font-size: 24px;
+        flex-shrink: 1;                                           /*чтоб логотип больше всего сжимался*/
+        padding-top: 35px;
+      }
+
+      &-content {
+        flex-grow: 1;                                             /*чтоб контент больше всего растягивался*/
+        display: flex;                                            /*контент должен быть тоже flex, внутри контента есть элементы которые нужно расположить по центру */
+        align-items: center;                                      /*элементы расположим по центру*/
+      }
+      &-wrapper {
+        margin: 0 auto;                                           /*сместился блок шапка влево и название с контентом, убрали ошибку*/
+
+        &__title,
+        &__subtitle {
+          text-align: center;                                       /*Относится только к title*/
+        }
+
+        &__title {
+          font-weight: bold;
+          font-size: 56px;
+          line-height: 60px;
+          margin-bottom: 16px;                                   /*Дистанция от subtitle до title, т.к. он уже зададим его по другому*/
+        }
+
+        &__subtitle {
+          @include  font-montserrat;
+
+          font-size: 18px;
+          line-height: 32px;
+          width: 80%;                                              /*чтоб центрировался subtitle*/
+          margin: 0 auto 44px;                                     /*margin-bottom: 44px;дистанция до input, чтоб не липла, т.к. он уже есть зададим его по другому, чтоб текст в две строки шёл*/
+        }
+
+        &__form {
+          display: flex;                                          /*элементы формы делаем в линию*/
+
+          &-input {
+            flex: 1;                                              /*для input растянем их, input сам по себе не имеет ширину 100%, контейнер большой, а инпут маленький */
+            padding-right: 40px;                                 /*дистанция для input*/
+            input {
+              @include  font-montserrat;
+
+              border:none;                                       /*у input нет бордеров*/
+              background: rgba(255, 255, 255, .25);              /*полупрозрачный белый фон*/
+              color: $color-white;
+              font-size: 16px;
+              line-height: 19px;
+              border-radius: 4px;
+              width: 100%;                                       /*растянем input*/
+              margin: 0;                                        /*обнуляем сразу для input*/
+              padding: 17px 20px;                              /*сначала 0 ставим, затем согласно макета 17px 20px, ...*/
+              outline: none;                                    /*убирает выделение с input*/
+              transition: .2s;                                  /*интерактивные input */
+
+              &::placeholder {
+              color: $color-white;                            /*задаем белый цвет текста для placeholder*/
+              }
+
+              &:focus {
+                background: rgba(255, 255, 255, .5);            /*добавили focus , чтоб сделать интерактивные input */
+              }
+
+            }
+          }
+
+          &-button {
+            button {
+              //@include  font-montserrat;
+
+              font-size: 16px;
+              margin: 0;                                      /*обнуляем сразу для кнопки*/
+              padding: 17px 20px;                             /*сначала 0 ставим, затем согласно макета 17px 20px, ...*/
+              border:none;                                    /*рамки у кнопки нет*/
+              background: linear-gradient(90deg, #FE985B 2.77%, #FE4FA7 100%);
+              border-radius: 4px;
+              outline: none;                                   /*убирает выделение с кнопки*/
+              color: $color-white;                            /*задаем цвет у кнопки*/
+              cursor: pointer;
+              text-decoration: none;
+
+              &:hover {
+                background: linear-gradient(  to right, #FE4FA7, #FE985B);         /*добавили при наведении на кнопку интерактив  - hover*/
+              }
+            }
+          }
+        }
+      }
+   }
+    //=== / header ===//
+
+    //=== promo ===//
+   .section-promo {
+      padding-top: 120px;                                      /*отступы для блока*/
+      padding-bottom: 120px;                                   /*отступы для блока*/
+   }
+
+    .section-promo-1 {
+      display: flex;                                          /*поскольку элементы распологаются горизонтально*/
+      &__content,
+      &__video {
+        flex-basis: 50%;                                      /*для обоих элементов content и video чтоб были одинаковой ширины*/
+      }
+
+
+      &__content {
+            padding-right: 90px;                              /*отступ справа у контента*/
+           .title{
+             font-size: 32px;                                 /*размер чуть отличался, был 36 - в три строки был текст*/
+             line-height: 51px;
+             font-weight: bold;
+             margin-bottom: 56px;                            /*отступ от названия*/
+           }
+           //  .subtitle{
+           //  font-size: 18px;
+           //  line-height: 22px;
+           //  font-weight: bold;
+           //  margin-top: 30px;                              /*отступ от подзаголовка до содержания */
+           //}
+           //.text{
+           //  font-size: 16px;
+           //  line-height: 27px;
+           //  font-weight: 300;
+           //  color: #6C6C6C;                               /*пока напишем цвет сдесь, затем вынесем в переменную*/
+           //  margin-top: 14px;                             /*отступ от нижнего текста */
+           //}
+      }
+           .description-item {
+             margin-top: 28px;                         /*отступы между текстом напротив видео*/
+           }
+
+      &__video {
+           img {
+             width: 100%;                              /*картинка еще не на всю ширину, для картинки внутри видео зададим width: 100% и height: auto*/
+             height: auto;                             /*принудительно растягиваем на всю ширину, а хотим чтоб высота подстраивалась автоматически*/
+             border-radius: 10px;
+             border: none;
+
+           }
+      }
+    }
+
+    .section-promo-2 {
+      display: flex;                                   /*второй блок имеет отступ сверху, разделительную черту и элементы, которые располагаются также в ряд */
+      padding-top: 86px;                               /*отступ от блока до верхнего блока*/
+      margin-top: 120px;                               /*отступ в предыдущем блоке от картинки до границы рамки данного блока*/
+      border-top: 1px solid #e2e2e2;                   /*линия едва видно*/
+      text-align: center;                              /*три элемента расположим по центру*/
+
+      .description-item + .description-item {
+        margin-left: 40px;                             /*расстояние между description-item */
+      }
+
+      //.&__item {                                     /*разметку переносим в стили, внутри item располагается icon title и content*/
+      //  .icon {
+      //    margin-bottom: 20px;                       /*от иконки отступ вниз 20px*/
+      //  }
+      //  .title {
+      //    margin-bottom: 14 px;                      /*от названия до содержания отступ 14px*/
+      //  }
+      //  .content {}
+      //}
+    }
+    //=== / promo ===//
+
+    //=== founder ===//
+   .section-founder {
+        background-color: #F6FAFD;
+        padding-top: 34px;
+
+        .section-inner {                                //будет flex - поэтому дописываем
+           display: flex;
+        }
+
+        &__img {
+          align-self: flex-end;                        // изображение прибиваем к низу
+        }
+        &__content {
+          align-self: center;                         // делаем по центру текст
+          padding-left: 50px;
+
+          &-text {
+            @include  font-montserrat;
+
+            font-size: 24px;
+            line-height: 40px;
+          }
+          &-name {
+            font-size: 24px;
+            line-height: 29px;
+            font-weight: bold;
+          }
+          &-post {
+            font-size: 20px;
+            line-height: 29px;
+          }
+        }
+   }
+    //=== / founder ===//
+
+    //===  plans ===//
+   .section-plans {
+         padding-top: 120px;                     //отступы блока
+         padding-bottom: 120px;
+         text-align: center;                     //по центру расположены
+
+         //&__title,
+         //  &__subtitle{
+         //  text-align: center;                   //по центру расположены  / удалил, убрал вверх
+         //}
+
+     &__title {
+         font-size: 36px;
+         line-height: 51px;
+         font-weight: bold;
+     }
+     &__subtitle {
+         font-size: 16px;
+         line-height: 28px;
+         font-weight: 300;
+         //margin-bottom: 110px;                    //дистанция от блока цены до блока заголовка
+         width: 50%;
+         margin: 0 auto 80px;                      //Т.к. текст в две строки, margin-bottom закоментировали, а margin будет выглядеть по другому, сокращаем дистанцию до списка 80px
+     }
+     &__list {
+         display: flex;                            /*элементы распологаются рядом и по списку - получается flex, контент в нем распологается по центру*/
+         justify-content: center;                  /*flex, контент в нем распологается по центру*/
+
+         &-item {
+             flex-basis: 370px;                    /* Это не - width - ширина элементов - блока - это flex-basis  , задали элементам ширину*/
+             padding: 60px 45px;                   /* Отступы сразу для всех элементов, задали примерно*/
+
+             &_title{
+                   font-size: 14px;
+                   line-height: 17px;
+                   font-weight: bold;
+                   text-transform: uppercase;
+                   margin-bottom: 26px;                //отступы
+             }
+             &_price{
+                   margin-bottom: 26px;                // отступы
+
+                    .prefix {
+                      font-size: 72px;
+                      line-height: 86px;
+                      font-weight: bold;
+                      color: #FE4FA7;
+                    }
+                    .postfix {
+                      font-size: 14px;
+                      line-height: 17px;
+                      font-weight: bold;
+                    }
+             }
+             &_description{
+                   font-size: 16px;
+                   line-height: 28px;
+                   font-weight: 300;
+                   margin-bottom: 50px;                //отступ от невидимой рамки figma с текстом до кнопки 24 px, но задаем примерно 40px от текста до кнопки
+             }
+             &_button .active-btn{
+               @include  font-montserrat;
+
+               font-size: 16px;
+               margin: 0;                                               /*обнуляем сразу для кнопки*/
+               padding: 17px 20px;                                      /*сначала 0 ставим, затем согласно макета 17px 20px, ...*/
+               border:none;                                             /*рамки у кнопки нет*/
+               background: linear-gradient(90deg, #FE985B 2.77%, #FE4FA7 100%);
+               border-radius: 4px;
+               outline: none;                                          /*убирает выделение с кнопки*/
+               color: $color-white;                                    /*задаем цвет у кнопки*/
+               cursor: pointer;
+               text-decoration: none;
+
+               &:hover {
+                 background: linear-gradient(  to right, #FE4FA7, #FE985B);   /*добавили при наведении на кнопку интерактив  - hover*/
+               }
+             }
+
+             &_button .inactive-btn{
+               @include  font-montserrat;
+
+               font-size: 16px;
+               margin: 0;                                               /*обнуляем сразу для кнопки*/
+               padding: 17px 20px;                                      /*сначала 0 ставим, затем согласно макета 17px 20px, ...*/
+               border: 1px solid #414141;                              /*рамку кнопке задали */
+               background: #ffffff;
+               border-radius: 4px;
+               outline: none;                                          /*убирает выделение с кнопки*/
+               color: #414141;                                         /*задаем цвет текста в кнопке*/
+               cursor: pointer;
+               text-decoration: none;
+               transition: .2s;
+
+               &:hover {
+               color: #FE4FA7;
+               border-color: #FE4FA7;                             /*добавили при наведении на кнопку интерактив  - hover*/
+               }
+             }
+
+
+             &.active {                                                //Если у нас item имеет класс .active
+               background-color: #F6FAFD;
+             }
+           }
+         }
+   }
+   //=== / plans ===//
+
+   //===  free ===//
+   .section-free {
+            text-align: center;
+            color: #ffffff;
+            background: linear-gradient(to right, #FE985B , #FE4FA7);  //градиент блока
+            padding-top: 120px;                                       //отступы
+            padding-bottom: 120px;                                    //отступы
+
+            &__title {
+              font-size: 66px;
+              line-height: 60px;
+              font-weight: bold;
+              margin-bottom: 26px;                                   //отступы
+            }
+            &__description {
+              @include font-montserrat;
+
+              font-size: 20px;
+              line-height: 30px;
+              //margin-bottom: 40px;                             //отступы
+              width: 50%;
+              margin: 0 auto 40px;                                //отступ - переопределил выше
+            }
+            &__button .inactive-btn-free {
+              font-size: 16px;
+              margin: 0;                                               /*обнуляем сразу для кнопки*/
+              padding: 17px 20px;                                      /*сначала 0 ставим, затем согласно макета 17px 20px, ...*/
+              border: 1px solid #FE4FA7;                               /*без рамки  */
+              background: #ffffff;
+              border-radius: 4px;
+              outline: none;                                          /*убирает выделение с кнопки*/
+              color: #414141;                                         /*задаем цвет текста в кнопке*/
+              cursor: pointer;
+              text-decoration: none;
+              transition: .2s;
+
+              &:hover {
+                color: #FE4FA7;
+                border-color: #000000;                             /*добавили при наведении на кнопку интерактив  - hover*/
+              }
+
+            }
+   }
+   //=== / free ===//
+
+  //===  footer ===//
+   .section-footer {
+            padding-top: 80px;                                       //всему блоку задаем отступы
+            padding-bottom: 80 px;
+
+            &__logo {
+              text-align: center;
+              font-size: 24px;
+              line-height: 29px;
+              font-weight: bold;
+              margin-bottom: 30px;                                    //от логотипа до навигации 30 px
+            }
+            &__nav {
+              display: flex;
+              justify-content: center;
+
+              margin: 0 0 75px;                                              //от навигации до нижней строки
+              padding: 0;
+              list-style: none;
+
+              li {
+                & + li {                                                     // делаем self
+                  margin-left: 60px;                                         // соседний элемент сдвигаем на 60px
+                }
+                 a {
+                   font-size: 14px;
+                   line-height: 20px;
+                   font-weight: bold;
+                   text-transform: uppercase;
+                   color: #464646;
+                   text-decoration: none;
+                   transition: .2s;                                       // интерактивные ссылки - одинаковая анимация для всей страницы
+
+                   &.footer-active,
+                   &:hover {                                              // интерактивные ссылки
+                     color: #FE50A6;
+                   }
+                 }
+              }
+            }
+            &__copyright_and_links {
+                @include font-montserrat;
+
+                display: flex;
+                justify-content: space-between;
+                font-size: 14px;
+                line-height: 18px;
+                width: 80%;                                            // если дистанция между ними большая, можем изменить ширину контейнера, который все оборачивает
+                margin: 0 auto;                                        // width 80 % и margin по центру
+                margin-bottom: 93px;
+            }
+   }
+   .helper-link {
+     margin: 0;
+     padding: 0;
+     list-style: none;
+     display: flex;
+
+            li {
+              & + li {                                              // делаем self
+                margin-left: 60px;                                   //дистанция между элементами меньше - соседний элемент сдвигаем на 60px
+              }                                                     // если дистанция между ними большая, можем изменить ширину контейнера, который все оборачивает
+              a {
+                color: #464646;
+                text-decoration: none;
+                transition: .2s;                                    // интерактивные ссылки - одинаковая анимация для всей страницы
+
+                &:hover {
+                  text-decoration: underline;                       // сделаем подчеркивание у ссылок - интерактив
+                }
+              }
+            }
+   }
+   //=== / footer ===//
